@@ -1,4 +1,7 @@
+import axios, { AxiosResponse } from 'axios';
+
 interface UserData {
+  readonly id?: number, // id is only available if user is saved to db
   readonly name: string,
   readonly age: number
 }
@@ -42,5 +45,12 @@ export class User {
     if (handlers) {
       handlers.forEach(callback => callback())
     }
+  }
+
+  static async fetch(userid: string) : Promise<User> {
+    return axios.get(`http://localhost:3000/users/${userid}`)
+      .then((response: AxiosResponse): User => {
+        return new User(response.data);
+      });
   }
 }
