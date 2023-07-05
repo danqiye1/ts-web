@@ -47,6 +47,11 @@ export class User {
     }
   }
 
+  /**
+   * Fetch a user based on the id
+   * @param userid 
+   * @returns 
+   */
   static async fetch(userid: string) : Promise<User> {
     return axios.get(`http://localhost:3000/users/${userid}`)
       .then((response: AxiosResponse): User => {
