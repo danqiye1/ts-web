@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
+import { Eventing } from './Eventing';
 
 interface UserData {
   readonly id?: number, // id is only available if user is saved to db
@@ -10,7 +11,8 @@ interface UserData {
 type Callback = () => void;
 
 export class User {
-  private readonly events: { [key: string]: Callback[] } = {}
+
+  private readonly events: Eventing = new Eventing()
 
   constructor(
     private readonly userdata: UserData
@@ -22,29 +24,6 @@ export class User {
 
   set(updateData: UserData): User {
     return new User({...updateData});
-  }
-
-  /**
-   * Function to register a event
-   * @param event 
-   * @param callback 
-   */
-  on(event: string, callback: Callback) : void {
-    const handlers = this.events[event] || [];
-    handlers.push(callback);
-    this.events[event] = handlers
-  }
-
-  /**
-   * Event Triggers
-   * @param event
-   */
-  trigger(event: string): void {
-    const handlers = this.events[event];
-
-    if (handlers) {
-      handlers.forEach(callback => callback())
-    }
   }
 
   /**
@@ -67,7 +46,7 @@ export class User {
     if (id) {
       axios.put(`http://locahost:3000/users/${id}`, this.userdata);
     } else {
-      axios.post(`http://localhost:3000/users/${id}`, this.userdata);
+      axios.post(`http://localhost:3000/users`, this.userdata);
     }
   }
 }
