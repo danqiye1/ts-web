@@ -58,4 +58,16 @@ export class User {
         return new User(response.data);
       });
   }
+
+  /**
+   * Save User to DB
+   */
+  save(): void {
+    const id = this.get('id')
+    if (id) {
+      axios.put(`http://locahost:3000/users/${id}`, this.userdata);
+    } else {
+      axios.post(`http://localhost:3000/users/${id}`, this.userdata);
+    }
+  }
 }
