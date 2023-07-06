@@ -1,6 +1,10 @@
 import axios, { AxiosPromise } from 'axios';
 
-export class Sync<T> {
+interface HasId {
+    id?: number;
+}
+
+export class Sync<T extends HasId> {
 
     constructor(private readonly rootURL: string) {}
 
@@ -17,7 +21,7 @@ export class Sync<T> {
      * Save User to DB
      */
     save(data: T): AxiosPromise {
-        const id = data;
+        const id = data.id;
         if (id) {
             return axios.put(`${this.rootURL}/${id}`, data);
         } else {
